@@ -17,6 +17,7 @@ def init_env():
 
 def main():
     init_env()
+    dist.destroy_process_group()
 
 
 if __name__ == "__main__":
