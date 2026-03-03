@@ -3,9 +3,9 @@ import torch
 import os
 
 def init_env():
-    local_rank = int(os.environ["LOCAL_RANK"])
-    print(f"Local rank: {local_rank}")
-    torch.cuda.set_device(local_rank)
+    # local_rank = int(os.environ["LOCAL_RANK"])
+    # print(f"Local rank: {local_rank}")
+    # torch.cuda.set_device(local_rank)
     print("Init process group")
     dist.init_process_group(backend="nccl")
     print("Init process group DONE")
