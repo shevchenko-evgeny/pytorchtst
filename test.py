@@ -1,7 +1,6 @@
 import torch.distributed as dist
 import torch
 import os
-import argparse
 
 def init_env():
     local_rank = int(os.environ["LOCAL_RANK"])
@@ -13,8 +12,6 @@ def init_env():
     rank = dist.get_rank()
     world_size = dist.get_world_size()
     print(f"World size: {world_size}, my rank: {rank}")
-
-def run_calculations():
 
 
 def main():
