@@ -41,7 +41,7 @@ def main():
     DEVICE = torch.device(f"cuda:{local_rank}")
 
     try:
-        dist.barrier()
+        dist.barrier(device_ids=[local_rank])
         topology()
         pass
     finally:
