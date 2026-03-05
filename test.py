@@ -44,9 +44,9 @@ def main():
         dist.barrier(device_ids=[local_rank])
         topology()
         r = dist.get_rank()
-        print(f"rank={r} local_rank={local_rank} BEFORE barrier", flush=True)
+        print(f"rank={r} local_rank={local_rank} BEFORE barrier \n", flush=True)
         dist.barrier(device_ids=[local_rank])
-        print(f"rank={r} AFTER barrier", flush=True)
+        print(f"rank={r} AFTER barrier \n", flush=True)
 
         pass
     finally:
