@@ -15,7 +15,7 @@ def init_env():
 
 def main():
     args = argparse.ArgumentParser(description="Benchmark GPU connectivities")
-    args.add_argument("--tensor_size", type=int, default=100000)
+    args.add_argument("--tensor_elements_number", type=int, default=100000)
     args.add_argument("--warm_rounds", type=int, default=10)
     args.add_argument("--rounds", type=int, default=100)
 
@@ -25,7 +25,7 @@ def main():
     global WARM_ROUNDS 
     global ROUNDS 
 
-    TENSOR_SIZE = args.tensor_size
+    TENSOR_SIZE = args.tensor_elements_number
     WARM_ROUNDS = args.warm_rounds
     ROUNDS = args.rounds
 
