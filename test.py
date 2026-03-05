@@ -19,13 +19,13 @@ def send_rcv():
     tensor = torch.full((2,2), rank, device=DEVICE, dtype=torch.float32)
     dst = src_dst[rank] 
     if dst > 0:
-        print("Rank {rank} sending \n")
+        print(f"Rank {rank} sending \n")
         dist.send(tensor, dst=dst)
-        print("Rank {rank} sent \n")
+        print(f"Rank {rank} sent \n")
     else: 
-        print("Rank {rank} receiving \n")
+        print(f"Rank {rank} receiving \n")
         dist.recv(tensor)
-        print("Rank {rank} received {tensor} \n")
+        print(f"Rank {rank} received {tensor} \n")
 
 
 
