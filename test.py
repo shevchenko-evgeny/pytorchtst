@@ -43,6 +43,11 @@ def main():
     try:
         dist.barrier(device_ids=[local_rank])
         topology()
+        r = dist.get_rank()
+        print(f"rank={r} local_rank={local_rank} BEFORE barrier", flush=True)
+        dist.barrier(device_ids=[local_rank])
+        print(f"rank={r} AFTER barrier", flush=True)
+
         pass
     finally:
         if dist.is_available() and dist.is_initialized():
