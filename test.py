@@ -19,7 +19,7 @@ def main():
     args.add_argument("--warm_rounds", type=int, default=10)
     args.add_argument("--rounds", type=int, default=100)
 
-    args.parse_args()
+    args = args.parse_args()
 
     global TENSOR_SIZE 
     global WARM_ROUNDS 
