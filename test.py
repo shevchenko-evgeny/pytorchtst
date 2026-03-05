@@ -1,15 +1,17 @@
 import torch.distributed as dist
 import torch
 import argparse
+import os
 
 def init_env():
     print("Init process group")
     dist.init_process_group(backend="nccl")
     rank = dist.get_rank()
+    local_rank = int(os.environ.get("LOCAL_RANK", 0))
     world_size = dist.get_world_size()
-    torch.cuda.set_device(rank)
-    print(f"World size: {world_size}, my rank: {rank}")
-    return rank
+    print(f"World size: {world_size}, global_rank: {rank}, local_rank: {local_rank}")
+    torch.cuda.set_device(local_rank)
+    return local_rank
 
 
 
@@ -29,7 +31,11 @@ def main():
     WARM_ROUNDS = args.warm_rounds
     ROUNDS = args.rounds
 
-    rank = init_env()
+    local_rank = init_env()
+
+    global DEVICE
+    DEVICE = torch.device(f"cuda:{local_rank}")
+
     dist.destroy_process_group()
 
 
