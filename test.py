@@ -13,10 +13,19 @@ def init_env():
     print(f"World size: {world_size}, global_rank: {rank}, local_rank: {local_rank} \n")
     return local_rank
 
-def topology():
-    devices_num = torch.cuda.device_count()
-    if dist.get_rank() == 0: 
-        print(f"I see {devices_num} devices interconnected")
+def send_rcv():
+    src_dst = [4, 5, 6, 7, -1, -1 ,-1, -1]
+    rank = dist.get_rank()
+    tensor = torch.full((2,2), rank, device=DEVICE, dtype=torch.float32)
+    dst = src_dst[rank] 
+    if dst > 0:
+        print("Rank {rank} sending \n")
+        dist.send(tensor, dst=dst)
+        print("Rank {rank} sent \n")
+    else: 
+        print("Rank {rank} receiving \n")
+        dist.recv(tensor)
+        print("Rank {rank} received {tensor} \n")
 
 
 
@@ -43,16 +52,12 @@ def main():
 
     try:
         dist.barrier(device_ids=[local_rank])
-        topology()
-        r = dist.get_rank()
-        print(f"rank={r} local_rank={local_rank} BEFORE barrier \n", flush=True)
-        dist.barrier(device_ids=[local_rank])
-        print(f"rank={r} AFTER barrier \n", flush=True)
+        send_rcv()
 
         pass
     finally:
         if dist.is_available() and dist.is_initialized():
-            print("destroying group")
+            print("destroying group \n")
             dist.destroy_process_group()
             time.sleep(1)
 
