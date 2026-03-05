@@ -12,6 +12,11 @@ def init_env():
     print(f"World size: {world_size}, global_rank: {rank}, local_rank: {local_rank} \n")
     return local_rank
 
+def topology():
+    devices_num = torch.cuda.device_count()
+    if dist.get_rank() == 0: 
+        print(f"I see {devices_num} devices interconnected")
+
 
 
 def main():
@@ -35,7 +40,15 @@ def main():
     global DEVICE
     DEVICE = torch.device(f"cuda:{local_rank}")
 
-    dist.destroy_process_group()
+    try:
+        dist.barrier()
+        topology()
+        pass
+    finally:
+        if dist.is_available() and dist.is_initialized():
+            dist.barrier()
+            dist.destroy_process_group()
+
 
 
 if __name__ == "__main__":
