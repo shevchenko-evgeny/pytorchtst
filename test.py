@@ -1,21 +1,35 @@
 import torch.distributed as dist
 import torch
-import os
+import argparse
 
 def init_env():
-    # local_rank = int(os.environ["LOCAL_RANK"])
-    # print(f"Local rank: {local_rank}")
-    # torch.cuda.set_device(local_rank)
     print("Init process group")
     dist.init_process_group(backend="nccl")
-    print("Init process group DONE")
     rank = dist.get_rank()
     world_size = dist.get_world_size()
+    torch.cuda.set_device(rank)
     print(f"World size: {world_size}, my rank: {rank}")
+    return rank
+
 
 
 def main():
-    init_env()
+    args = argparse.ArgumentParser(description="Benchmark GPU connectivities")
+    args.add_argument("--tensor_size", type=int, default=100000)
+    args.add_argument("--warm_rounds", type=int, default=10)
+    args.add_argument("--rounds", type=int, default=100)
+
+    args.parse_args()
+
+    global TENSOR_SIZE 
+    global WARM_ROUNDS 
+    global ROUNDS 
+
+    TENSOR_SIZE = args.tensor_size
+    WARM_ROUNDS = args.warm_rounds
+    ROUNDS = args.rounds
+
+    rank = init_env()
     dist.destroy_process_group()
 
 
