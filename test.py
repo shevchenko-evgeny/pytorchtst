@@ -2,6 +2,7 @@ import torch.distributed as dist
 import torch
 import argparse
 import os
+import time
 
 def init_env():
     local_rank = int(os.environ.get("LOCAL_RANK", 0))
@@ -51,7 +52,9 @@ def main():
         pass
     finally:
         if dist.is_available() and dist.is_initialized():
+            print("destroying group")
             dist.destroy_process_group()
+            time.sleep(1)
 
 
 
