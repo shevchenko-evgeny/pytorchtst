@@ -4,14 +4,12 @@ import argparse
 import os
 
 def init_env():
-    print("Init process group \n")
+    local_rank = int(os.environ.get("LOCAL_RANK", 0))
+    torch.cuda.set_device(local_rank)
     dist.init_process_group(backend="nccl")
     rank = dist.get_rank()
-    local_rank = int(os.environ.get("LOCAL_RANK", 0))
-    node_rank = int(os.environ.get("NODE_RANK", 0))
     world_size = dist.get_world_size()
-    print(f"NODE: {node_rank} World size: {world_size}, global_rank: {rank}, local_rank: {local_rank} \n")
-    torch.cuda.set_device(local_rank)
+    print(f"World size: {world_size}, global_rank: {rank}, local_rank: {local_rank} \n")
     return local_rank
 
 
