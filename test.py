@@ -23,8 +23,9 @@ def send_rcv():
         dist.send(tensor, dst=dst)
         print(f"Rank {rank} sent \n")
     else: 
-        print(f"Rank {rank} receiving \n")
-        dist.recv(tensor)
+        src = src_dst.index(rank)
+        print(f"Rank {rank} receiving from {src} \n")
+        dist.recv(tensor, src=src)
         print(f"Rank {rank} received {tensor} \n")
 
 
